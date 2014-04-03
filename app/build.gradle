@@ -10,10 +10,30 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
+    signingConfigs{
+
+        releaseConfig{
+            storeFile file('E:/Development/Android/key.jks');
+            storePassword ('AmericanIdiot1984')
+            keyAlias 'android';
+            keyPassword 'AmericanIdiot1984';
+        }
+    }
+
     buildTypes {
+
         release {
+            debuggable false
             runProguard false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+
+            signingConfig signingConfigs.releaseConfig
+        }
+        debug{
+            runProguard false
+            debuggable true
+            signingConfig signingConfigs.releaseConfig
         }
     }
 }
