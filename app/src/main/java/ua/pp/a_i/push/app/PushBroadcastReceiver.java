@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
@@ -22,10 +23,8 @@ public class PushBroadcastReceiver extends BroadcastReceiver {
         Bundle extras=intent.getExtras();
         try {
             JSONObject data = new JSONObject(extras.getString("data"));
-           String message=data.getString("message");
-            Bundle bundle=new Bundle();
-            bundle.putString("message",message);
-            context.startActivity(new Intent(context, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK), bundle);
+            String message=data.getString("message");
+            Toast.makeText(context,message,Toast.LENGTH_LONG).show();
 
         }
         catch (Exception e){
