@@ -7,10 +7,13 @@ import android.os.Bundle;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
+import org.json.JSONObject;
+
 /**
  * Created by Yevhen on 03.04.2014.
  */
 public class PushBroadcastReceiver extends BroadcastReceiver {
+
     @Override
     public void onReceive(Context context, Intent intent) {
 
@@ -18,10 +21,15 @@ public class PushBroadcastReceiver extends BroadcastReceiver {
         String type=gcm.getMessageType(intent);
         Bundle extras=intent.getExtras();
         try {
-            Object data = extras.get("data");
-           String s= data.toString();
+            JSONObject data = new JSONObject(extras.getString("data"));
+           String message=data.getString("message");
+            Bundle bundle=new Bundle();
+            bundle.putString("message",message);
+            context.startActivity(new Intent(context, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK), bundle);
+
         }
         catch (Exception e){
+            String ex=e.getMessage();
 
         }
     }

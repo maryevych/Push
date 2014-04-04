@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
@@ -27,32 +28,37 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        context=getApplicationContext();
-        gcm=GoogleCloudMessaging.getInstance(this);
-        new AsyncTask<Void,Void,String>(){
-            @Override
-            protected String doInBackground(Void... params) {
-                String regid="";
-                try{
-                    regid=gcm.register("862066542340");
-                    HttpGet request=new HttpGet("http://a-i.pp.ua/push/regdevice?id="+regid);
-                    HttpClient client=new DefaultHttpClient();
-                    HttpResponse response=client.execute(request);
-                    InputStream stream=response.getEntity().getContent();
-                    BufferedReader reader=new BufferedReader(new InputStreamReader(stream));
-                    String line="";
-                    line=reader.readLine();
-                    while (line!=null){
-                        result+=line;
-                        line=reader.readLine();
+        if(savedInstanceState==null){
+            context = getApplicationContext();
+            gcm = GoogleCloudMessaging.getInstance(this);
+            new AsyncTask<Void, Void, String>() {
+                @Override
+                protected String doInBackground(Void... params) {
+                    String regid = "";
+                    try {
+                        regid = gcm.register("862066542340");
+                        HttpGet request = new HttpGet("http://a-i.pp.ua/push/regdevice?id=" + regid);
+                        HttpClient client = new DefaultHttpClient();
+                        HttpResponse response = client.execute(request);
+                        InputStream stream = response.getEntity().getContent();
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+                        String line = "";
+                        line = reader.readLine();
+                        while (line != null) {
+                            result += line;
+                            line = reader.readLine();
+                        }
+                    } catch (Exception e) {
+
                     }
+                    return regid;
                 }
-                catch (Exception e){
-
-                }
-                return regid;
-            }
-        }.execute();
-
+            }.execute();
+        }
+        else{
+            String message=savedInstanceState.getString("message");
+            final TextView textView=(TextView)findViewById(R.id.text_view);
+            textView.setText(message);
+        }
     }
 }
