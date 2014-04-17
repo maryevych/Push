@@ -7,8 +7,8 @@
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="modules">
           <set>
-            <option value="E:\Development\Android\Push" />
-            <option value="E:\Development\Android\Push\app" />
+            <option value="D:\Development\Android\Push" />
+            <option value="D:\Development\Android\Push\app" />
           </set>
         </option>
       </GradleProjectSettings>

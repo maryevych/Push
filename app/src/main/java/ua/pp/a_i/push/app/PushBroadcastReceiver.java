@@ -23,24 +23,12 @@ public class PushBroadcastReceiver extends BroadcastReceiver {
         ComponentName comp = new ComponentName(context.getPackageName(), PushIntentService.class.getName());
         startWakefullService(context, (intent.setComponent(comp)));
         setResultCode(Activity.RESULT_OK);
-
-        //
-
-        GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(context);
-        String type = gcm.getMessageType(intent);
-        Bundle extras = intent.getExtras();
-        try {
-            JSONObject data = new JSONObject(extras.getString("data"));
-            String message = data.getString("message");
-            Toast.makeText(context, message, Toast.LENGTH_LONG).show();
-
-        } catch (Exception e) {
-            String ex = e.getMessage();
-
-        }
     }
 
+
+
     private void startWakefullService(Context context, Intent intent) {
+        context.startService(intent);
 
     }
 }
