@@ -7,8 +7,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.widget.Toast;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+
+import org.json.JSONObject;
 
 /**
  * Created by Yevhen on 03.04.2014.
@@ -43,12 +46,20 @@ public class PushIntentService extends IntentService {
     }
 
     private void sendNotification(String msg) {
-        notificationManager=(NotificationManager)this.getSystemService(Context.NOTIFICATION_SERVICE);
-        PendingIntent contentIntent=PendingIntent.getActivity(this,0,new Intent(this,MainActivity.class),0);
-        NotificationCompat.Builder builder=new NotificationCompat.Builder(this).setSmallIcon(android.R.drawable.ic_dialog_alert)
-                .setContentTitle("Notification").setStyle(new NotificationCompat.BigTextStyle().bigText(msg)).setContentText(msg);
-        builder.setContentIntent(contentIntent);
-        notificationManager.notify(NOTIFICATION_ID,builder.build());
+        try {
+            JSONObject data = new JSONObject(msg);
+            String title=data.getString("title");
+            String message=data.getString("message");
 
+            notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+            PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class), 0);
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this).setSmallIcon(android.R.drawable.ic_dialog_alert)
+                    .setContentTitle(title).setStyle(new NotificationCompat.BigTextStyle().bigText(message)).setContentText(message);
+            builder.setContentIntent(contentIntent);
+            notificationManager.notify(NOTIFICATION_ID, builder.build());
+        }
+        catch (Exception e){
+            Toast.makeText(PushApp.getContext(),e.getMessage(),Toast.LENGTH_SHORT);
+        }
     }
 }
